@@ -33,7 +33,6 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
-
 builder
     .Services.AddScoped<ICategoryService, CategoryService>()
     .AddScoped<ICategoryRepository, CategoryRepository>()
@@ -55,6 +54,26 @@ builder
     .AddScoped<IWishlistRepository, WishlistRepository>()
     .AddScoped<ICartService, CartService>()
     .AddScoped<ICartRepository, CartRepository>();
+
+// cors
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:3000", "http://localhost:3001")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .SetIsOriginAllowed((host) => true)
+                .AllowCredentials();
+        }
+    );
+});
+
+// later when you deployed FE => add in line 67
 
 //auth
 builder
@@ -91,8 +110,7 @@ var app = builder.Build();
 
 app.UseRouting();
 
-app.MapGet("/",()=>"Server is running");
-
+app.MapGet("/", () => "Server is running");
 
 using (var scope = app.Services.CreateScope())
 {
@@ -120,10 +138,23 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
+
+
+// cors
+app.UseCors(MyAllowSpecificOrigins);
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
+
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Add a defult route that return a string  in line 94
+
 
 app.Run();
