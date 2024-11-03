@@ -20,7 +20,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Admin")]
+        // [Authorize(Policy = "Admin")]
         public async Task<ActionResult<ProductReadDto>> CreateOne(
             [FromBody] ProductCreateDto createDto
         )
@@ -29,13 +29,30 @@ namespace src.Controllers
             return Created($"api/v1/products/{productCreated.Id}", productCreated);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<ProductReadDto>>> GetAll(
-            [FromQuery] PaginationOptions paginationOptions
-        )
+        // [HttpGet]
+        // public async Task<ActionResult<List<ProductReadDto>>> GetAll(
+        //     [FromQuery] PaginationOptions paginationOptions
+        // )
+        // {
+        //     var productList = await _productService.GetAllAsync(paginationOptions);
+        //     return Ok(productList);
+        // }
+
+             [HttpGet]
+        // old"Task<ActionResult<List<ProductReadDto>>>
+        public async Task<ActionResult<List<ProductListDto>>> GetAllAsync([FromQuery] PaginationOptions options)
         {
-            var productList = await _productService.GetAllAsync(paginationOptions);
-            return Ok(productList);
+            var productList = await _productService.GetAllAsync(options);
+            // calculate the total count 
+            var totalCount = await _productService.CountProductsAsync();
+
+            var response = new ProductListDto
+            {
+                Products = productList,
+                TotalCount = totalCount
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]

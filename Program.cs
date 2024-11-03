@@ -134,9 +134,7 @@ using (var scope = app.Services.CreateScope())
 }
 app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ErrorHandlerMiddleware>();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
+
 
 
 
