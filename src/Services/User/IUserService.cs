@@ -6,8 +6,7 @@ namespace src.Services.UserService
     public interface IUserService
     {
         Task<UserReadDto> CreateOneAsync(UserCreateDto createDto);
-        Task<List<UserReadDto>> GetAllAsync(PaginationOptions paginationOptions);
-         Task<List<UserReadDto>> GetAllAsync();
+        Task<List<UserReadDto>> GetAllAsync();
         Task<UserReadDto> GetByIdAsync(Guid id);
         Task<bool> DeleteOneAsync(Guid id);
         Task<bool> UpdateOneAsync(Guid id, UserUpdateDto updateDto);

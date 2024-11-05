@@ -21,16 +21,16 @@ namespace src.Controllers
         public async Task<ActionResult<UserReadDto>> UserSignUp([FromBody] UserCreateDto createDto)
         {
             var userCreated = await _userService.CreateOneAsync(createDto);
+            
+
             return Created($"api/v1/user/{userCreated.UserID}", userCreated);
         }
 
         [HttpGet]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<List<UserReadDto>>> GetAll(
-            [FromQuery] PaginationOptions paginationOptions
-        )
+        public async Task<ActionResult<List<UserReadDto>>> GetAll()
         {
-            var userList = await _userService.GetAllAsync(paginationOptions);
+            var userList = await _userService.GetAllAsync();
             return Ok(userList);
         }
 

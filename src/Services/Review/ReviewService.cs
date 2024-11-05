@@ -41,11 +41,11 @@ namespace src.Services.review
         }
 
         // Get all reviews
-        public async Task<List<ReviewReadDto>> GetAllAsync(PaginationOptions paginationOptions)
+        public async Task<List<ReviewReadDto>> GetAllAsync()
         {
             try
             {
-                var reviewList = await _reviewRepo.GetReviewsAsync(paginationOptions);
+                var reviewList = await _reviewRepo.GetReviewsAsync();
                 return _mapper.Map<List<Review>, List<ReviewReadDto>>(reviewList);
             }
             catch (Exception ex)

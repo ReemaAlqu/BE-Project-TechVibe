@@ -20,13 +20,11 @@ namespace src.Controllers
 
         // GET api/v1/review
         [HttpGet]
-        public async Task<ActionResult<List<ReviewReadDto>>> GetAll(
-            [FromQuery] PaginationOptions paginationOptions
-        )
+        public async Task<ActionResult<List<ReviewReadDto>>> GetAll()
         {
             try
             {
-                var reviews = await _reviewService.GetAllAsync(paginationOptions);
+                var reviews = await _reviewService.GetAllAsync();
                 return Ok(reviews);
             }
             catch (Exception ex)

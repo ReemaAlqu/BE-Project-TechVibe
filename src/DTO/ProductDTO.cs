@@ -12,7 +12,7 @@ namespace src.DTO
             public Guid CategoryId { get; set; }
         }
 
-          public class ProductListDto
+        public class ProductListDto
         {
             public List<ProductReadDto> Products { get; set; }
             public int TotalCount { get; set; }
@@ -25,7 +25,8 @@ namespace src.DTO
             public required decimal Price { get; set; }
             public required string ImageUrl { get; set; }
             public required string Description { get; set; }
-            public Category Category { get; set; }
+            public Guid CategoryId { get; set; }
+            public required Category Category { get; set; }
         }
 
         public class ProductUpdateDto

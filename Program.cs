@@ -19,6 +19,11 @@ using static src.Entity.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//***********************************************
+builder.Services.AddControllersWithViews();
+
+//***********************************************
+
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(
     builder.Configuration.GetConnectionString("Local")
 );
@@ -135,16 +140,11 @@ using (var scope = app.Services.CreateScope())
 app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
-
-
-
 // cors
 app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
-
 
 if (app.Environment.IsDevelopment())
 {

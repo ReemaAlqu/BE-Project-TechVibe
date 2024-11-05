@@ -62,8 +62,8 @@ namespace src.Repository
 
         public async Task<Address?> GetAddressByIdAsync(Guid id)
         {
-            return await _address.Include(a => a.User)
-            .FirstOrDefaultAsync(a => a.AddressId == id);
+            return await _address.FirstOrDefaultAsync(a => a.AddressId == id);
+            
 
         
         }

@@ -47,17 +47,17 @@ namespace src.Repository
         }
 
         // Get all reviews with pagination
-        public async Task<List<Review>> GetReviewsAsync(PaginationOptions paginationOptions)
+        public async Task<List<Review>> GetReviewsAsync()
         {
             try
             {
-                var result = _review
-                    .Include(r => r.Order)
-                    .Where(r => r.Comment.ToLower().Contains(paginationOptions.Name));
-                return await result
-                    .Skip(paginationOptions.Offset)
-                    .Take(paginationOptions.Limit)
-                    .ToListAsync();
+                // var result = _review
+                //     .Include(r => r.Order)
+                //     .Where(r => r.Comment.ToLower().Contains(paginationOptions.Name));
+                // return await result
+                //     .
+                // .ToListAsync();
+                return await _review.ToListAsync();
             }
             catch (Exception ex)
             {

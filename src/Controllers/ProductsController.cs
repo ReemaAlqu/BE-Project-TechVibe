@@ -29,28 +29,16 @@ namespace src.Controllers
             return Created($"api/v1/products/{productCreated.Id}", productCreated);
         }
 
-        // [HttpGet]
-        // public async Task<ActionResult<List<ProductReadDto>>> GetAll(
-        //     [FromQuery] PaginationOptions paginationOptions
-        // )
-        // {
-        //     var productList = await _productService.GetAllAsync(paginationOptions);
-        //     return Ok(productList);
-        // }
-
-             [HttpGet]
-        // old"Task<ActionResult<List<ProductReadDto>>>
-        public async Task<ActionResult<List<ProductListDto>>> GetAllAsync([FromQuery] PaginationOptions options)
+        [HttpGet]
+        public async Task<ActionResult<List<ProductListDto>>> GetAllAsync(
+            [FromQuery] PaginationOptions options
+        )
         {
             var productList = await _productService.GetAllAsync(options);
-            // calculate the total count 
+            // calculate the total count
             var totalCount = await _productService.CountProductsAsync();
 
-            var response = new ProductListDto
-            {
-                Products = productList,
-                TotalCount = totalCount
-            };
+            var response = new ProductListDto { Products = productList, TotalCount = totalCount };
 
             return Ok(response);
         }
@@ -58,7 +46,6 @@ namespace src.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductReadDto>> GetById([FromRoute] Guid id)
         {
-
             var product = await _productService.GetByIdAsync(id);
             return Ok(product);
         }
@@ -91,35 +78,44 @@ namespace src.Controllers
             return NoContent();
         }
 
-        [HttpGet("search")]
-        //search?filter.category&name=vitamin&limit=10&offset=0
-        public async Task<ActionResult<List<ProductReadDto>>> SearchProducts(
-       [FromQuery] PaginationOptions searchOptions,
-       [FromQuery] PaginationOptions paginationOptions)
-        {
-            var products = await _productService.SearchProductsAsync(searchOptions, paginationOptions);
+        // [HttpGet("search")]
+        // //search?filter.category&name=vitamin&limit=10&offset=0
+        // public async Task<ActionResult<List<ProductReadDto>>> SearchProducts(
+        //     [FromQuery] PaginationOptions searchOptions,
+        //     [FromQuery] PaginationOptions paginationOptions
+        // )
+        // {
+        //     var products = await _productService.SearchProductsAsync(
+        //         searchOptions,
+        //         paginationOptions
+        //     );
 
-            if (products == null || products.Count == 0)
-            {
-                return NotFound(new { message = "No products found matching the search criteria." });
-            }
+        //     if (products == null || products.Count == 0)
+        //     {
+        //         return NotFound(
+        //             new { message = "No products found matching the search criteria." }
+        //         );
+        //     }
 
-            return Ok(products);
-        }
-        //api/v1/products/sorted-filtered?filter.category=Vitamins&limit=10&offset=0
-        [HttpGet("sorted-filtered")]
-        public async Task<ActionResult<List<ProductReadDto>>> GetAllWithSortingAndFiltering(
-    [FromQuery] PaginationOptions paginationOptions)
-        {
-            var products = await _productService.GetAllWithSortingAndFilteringAsync(paginationOptions);
+        //     return Ok(products);
+        // }
 
-            if (products == null || products.Count == 0)
-            {
-                return NotFound(new { message = "No products found." });
-            }
+        // //api/v1/products/sorted-filtered?filter.category=Vitamins&limit=10&offset=0
+        // [HttpGet("sorted-filtered")]
+        // public async Task<ActionResult<List<ProductReadDto>>> GetAllWithSortingAndFiltering(
+        //     [FromQuery] PaginationOptions paginationOptions
+        // )
+        // {
+        //     var products = await _productService.GetAllWithSortingAndFilteringAsync(
+        //         paginationOptions
+        //     );
 
-            return Ok(products);
-        }
+        //     if (products == null || products.Count == 0)
+        //     {
+        //         return NotFound(new { message = "No products found." });
+        //     }
 
+        //     return Ok(products);
+        // }
     }
 }

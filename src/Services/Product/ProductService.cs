@@ -30,7 +30,7 @@ namespace src.Services.product
             return _mapper.Map<List<Product>, List<ProductReadDto>>(productList);
         }
 
-                // new => total amount of products
+        // new => total amount of products
         public async Task<int> CountProductsAsync()
         {
             // return 12
@@ -73,17 +73,16 @@ namespace src.Services.product
             return await _productRepository.UpdateOneAsync(foundProduct);
         }
 
-        public async Task<List<ProductReadDto>> SearchProductsAsync(PaginationOptions searchOptions, PaginationOptions paginationOptions)
-        {
-            var products = await _productRepository.SearchProductsAsync(searchOptions, paginationOptions);
-            return _mapper.Map<List<ProductReadDto>>(products);
-        }
-        public async Task<List<ProductReadDto>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions)
-        {
-            var products = await _productRepository.GetAllWithSortingAndFilteringAsync(paginationOptions);
+        // public async Task<List<ProductReadDto>> SearchProductsAsync(PaginationOptions searchOptions, PaginationOptions paginationOptions)
+        // {
+        //     var products = await _productRepository.SearchProductsAsync(searchOptions, paginationOptions);
+        //     return _mapper.Map<List<ProductReadDto>>(products);
+        // }
+        // public async Task<List<ProductReadDto>> GetAllWithSortingAndFilteringAsync(PaginationOptions paginationOptions)
+        // {
+        //     var products = await _productRepository.GetAllWithSortingAndFilteringAsync(paginationOptions);
 
-            return _mapper.Map<List<ProductReadDto>>(products);
-        }
-
+        //     return _mapper.Map<List<ProductReadDto>>(products);
+        // }
     }
 }

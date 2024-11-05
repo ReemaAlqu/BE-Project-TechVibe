@@ -49,12 +49,7 @@ namespace src.Services.UserService
             return _mapper.Map<List<User>, List<UserReadDto>>(userList);
         }
 
-        public async Task<List<UserReadDto>> GetAllAsync(PaginationOptions paginationOptions)
-        {
-            var userList = await _userRepo.GetAllAsync(paginationOptions);
-            return _mapper.Map<List<User>, List<UserReadDto>>(userList);
-        }
-
+        
         public async Task<UserReadDto> GetByIdAsync(Guid id)
         {
             var foundUser = await _userRepo.GetByIdAsync(id);
