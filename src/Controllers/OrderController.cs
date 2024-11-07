@@ -12,11 +12,13 @@ namespace src.Controllers
     [Route("/api/v1/[controller]")]
     public class OrderController : ControllerBase
     {
-        protected IOrderService _orderService;
+        protected readonly IOrderService _orderService;
+        protected readonly IAuthorizationService _authorization;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, IAuthorizationService authorization)
         {
             _orderService = orderService;
+            _authorization = authorization;
         }
 
         [HttpGet("{id}")]
@@ -33,23 +35,36 @@ namespace src.Controllers
             return Ok(await _orderService.GetAllOrdersAsync());
         }
 
-        [HttpPost]
+        // [HttpPost]
+        // [Authorize]
+        // public async Task<IActionResult> Create([FromBody] OrderDTO.Create order)
+        // {
+        //     var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //     if (userId == null || !Guid.TryParse(userId, out Guid parsedUserId))
+        //     {
+        //         return BadRequest("Invalid User ID.");
+        //     }
+        //     order.UserID = parsedUserId;
+        //     var createdOrderDTO = await _orderService.CreateOneOrderAsync(parsedUserId, order);
+        //     return CreatedAtAction(
+        //         nameof(GetOrderById),
+        //         new { id = createdOrderDTO.ID },
+        //         createdOrderDTO
+        //     );
+        // }
+    
+
+    //************************************************************************
+         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] OrderDTO.Create order)
+        public async Task<ActionResult<OrderDTO.Get>> CreateOneAsync([FromBody] OrderDTO.Create orderCreateDto)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId == null || !Guid.TryParse(userId, out Guid parsedUserId))
-            {
-                return BadRequest("Invalid User ID.");
-            }
-            order.UserID = parsedUserId;
-            var createdOrderDTO = await _orderService.CreateOneOrderAsync(parsedUserId, order);
-            return CreatedAtAction(
-                nameof(GetOrderById),
-                new { id = createdOrderDTO.ID },
-                createdOrderDTO
-            );
+            var authenticatedClaims = HttpContext.User;
+            var userId = authenticatedClaims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
+            var userGuid = new Guid(userId);
+            return await _orderService.CreateOneOrderAsync(userGuid, orderCreateDto);
         }
+
 
         [HttpPut("{id}")]
         [Authorize]

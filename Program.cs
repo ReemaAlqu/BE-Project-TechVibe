@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
-using Services;
 using src.Database;
 using src.Entity;
 using src.Middlewares;
@@ -11,10 +10,8 @@ using src.Repository;
 using src.Services;
 using src.Services.category;
 using src.Services.product;
-using src.Services.review;
 using src.Services.UserService;
 using src.Utils;
-using static src.Entity.Payment;
 using static src.Entity.User;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,8 +25,7 @@ var dataSourceBuilder = new NpgsqlDataSourceBuilder(
     builder.Configuration.GetConnectionString("Local")
 );
 dataSourceBuilder.MapEnum<Role>();
-dataSourceBuilder.MapEnum<PaymentStatus>();
-dataSourceBuilder.MapEnum<PaymentMethod>();
+
 dataSourceBuilder.MapEnum<OrderStatuses>();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
@@ -43,22 +39,11 @@ builder
     .AddScoped<ICategoryRepository, CategoryRepository>()
     .AddScoped<IOrderRepository, OrderRepository>()
     .AddScoped<IOrderService, OrderService>()
-    .AddScoped<IPaymentRepository, PaymentRepository>()
-    .AddScoped<IPaymentService, PaymentService>()
     .AddScoped<IProductService, ProductService>()
     .AddScoped<IProductRepository, ProductRepository>()
-    .AddScoped<IAddressService, AddressService>()
-    .AddScoped<AddressRepository, AddressRepository>()
     .AddScoped<IUserService, UserService>()
-    .AddScoped<UserRepository, UserRepository>()
-    .AddScoped<IReviewService, ReviewService>()
-    .AddScoped<ReviewRepository, ReviewRepository>()
-    .AddScoped<ICouponService, CouponService>()
-    .AddScoped<CouponRepository, CouponRepository>()
-    .AddScoped<IWishlistService, WishlistService>()
-    .AddScoped<IWishlistRepository, WishlistRepository>()
-    .AddScoped<ICartService, CartService>()
-    .AddScoped<ICartRepository, CartRepository>();
+    .AddScoped<UserRepository, UserRepository>();
+
 
 // cors
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";

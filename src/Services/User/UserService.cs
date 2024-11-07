@@ -49,10 +49,13 @@ namespace src.Services.UserService
             return _mapper.Map<List<User>, List<UserReadDto>>(userList);
         }
 
-        
         public async Task<UserReadDto> GetByIdAsync(Guid id)
         {
             var foundUser = await _userRepo.GetByIdAsync(id);
+            if (foundUser == null)
+            {
+                throw CustomException.NotFound($"User with {id} not found.");
+            }
             return _mapper.Map<User, UserReadDto>(foundUser);
         }
 

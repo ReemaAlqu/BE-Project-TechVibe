@@ -13,12 +13,13 @@ namespace src.DTO
     {
         public class UserCreateDto
         {
+            public string? Name { get; set; }
 
-            public string Name { get; set; }
-
+            [Required]
             [PasswordComplexity]
             public string Password { get; set; }
 
+            [Required]
             [EmailAddress(ErrorMessage = "Please provide email with right format")]
             public string EmailAddress { get; set; }
             public string? Phone { get; set; }
@@ -26,9 +27,11 @@ namespace src.DTO
 
         public class UserSignInDto
         {
+            [Required]
             [EmailAddress(ErrorMessage = "Please provide email with right format")]
             public string EmailAddress { get; set; }
 
+            [Required]
             [PasswordComplexity]
             public string Password { get; set; }
         }
@@ -38,6 +41,7 @@ namespace src.DTO
             public Guid UserID { get; set; }
             public string? Name { get; set; }
             public string? EmailAddress { get; set; }
+            public string? Password { get; set; }
             public string? Phone { get; set; }
             public Role UserRole { get; set; }
         }
@@ -46,6 +50,7 @@ namespace src.DTO
         {
             public string? Name { get; set; }
             public string? EmailAddress { get; set; }
+            public string? Password { get; set; }
             public string? Phone { get; set; }
         }
     }

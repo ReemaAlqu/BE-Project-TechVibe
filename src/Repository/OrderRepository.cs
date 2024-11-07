@@ -24,17 +24,10 @@ namespace src.Repository
         }
 
         public async Task<Order?> GetOrderByIdAsync(Guid id) =>
-            await _orders
-                .Include(order => order.User)
-                .Include(order => order.Payment)
-                .Include(order => order.Reviews)
-                .FirstOrDefaultAsync(o => o.ID == id);
+            await _orders.Include(order => order.User).FirstOrDefaultAsync(o => o.ID == id);
 
         public async Task<List<Order>> GetAllOrdersAsync() =>
-            await _orders
-                .Include(order => order.User)
-                .Include(order => order.Payment)
-                .ToListAsync();
+            await _orders.Include(order => order.User).ToListAsync();
 
         // public async Task<Order> AddOrderAsync(Order newOrder)
         // {
@@ -42,7 +35,7 @@ namespace src.Repository
         //     await _db.SaveChangesAsync();
         //     return result.Entity;
         // }
-           public async Task<Order> AddOrderAsync(Order newOrder)
+        public async Task<Order> AddOrderAsync(Order newOrder)
         {
             // Add the new order to the repository
             await _orders.AddAsync(newOrder);
@@ -50,15 +43,13 @@ namespace src.Repository
 
             // Load related entities in one go for better performance.
             await _db.Entry(newOrder)
-                     .Collection(o => o.OrderDetails)
-                     .Query()
-                     .Include(od => od.Product)  // Eager load the related Product entity for each OrderDetail
-                     .LoadAsync();
+                .Collection(o => o.OrderDetails)
+                .Query()
+                .Include(od => od.Product) // Eager load the related Product entity for each OrderDetail
+                .LoadAsync();
 
             return newOrder;
         }
-
-        
 
         public async Task<bool> UpdateOrderAsync(Order order)
         {
