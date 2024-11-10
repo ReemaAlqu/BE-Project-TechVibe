@@ -44,7 +44,6 @@ builder
     .AddScoped<IUserService, UserService>()
     .AddScoped<UserRepository, UserRepository>();
 
-
 // cors
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
@@ -87,6 +86,7 @@ builder
             ),
         };
     });
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
@@ -100,7 +100,7 @@ var app = builder.Build();
 
 app.UseRouting();
 
-app.MapGet("/", () => "Server is running");
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -122,9 +122,9 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Database connection failed: {ex.Message}");
     }
 }
+
 app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ErrorHandlerMiddleware>();
-
 // cors
 app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
@@ -137,7 +137,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Add a defult route that return a string  in line 94
+// Add a defult route that return a string 
+app.MapGet("/", () => "Server is running");
 
 
 app.Run();

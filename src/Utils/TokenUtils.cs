@@ -19,9 +19,9 @@ namespace src.Utils
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.EmailAddress),
                 new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()),
                 new Claim(ClaimTypes.Role, user.UserRole.ToString()),
+                new Claim(ClaimTypes.Email, user.EmailAddress),
             };
 
             var key = new SymmetricSecurityKey(
@@ -38,7 +38,7 @@ namespace src.Utils
             {
                 Issuer = issuer,
                 Audience = audience,
-                Expires = DateTime.Now.AddMinutes(200),
+                Expires = DateTime.Now.AddMinutes(60),
                 Subject = new ClaimsIdentity(claims),
                 SigningCredentials = signingCredentials,
             };

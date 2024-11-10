@@ -20,7 +20,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<ProductReadDto>> CreateOne(
             [FromBody] ProductCreateDto createDto
         )
@@ -35,7 +35,6 @@ namespace src.Controllers
         )
         {
             var productList = await _productService.GetAllAsync(options);
-            // calculate the total count
             var totalCount = await _productService.CountProductsAsync();
 
             var response = new ProductListDto { Products = productList, TotalCount = totalCount };
@@ -77,45 +76,5 @@ namespace src.Controllers
             }
             return NoContent();
         }
-
-        // [HttpGet("search")]
-        // //search?filter.category&name=vitamin&limit=10&offset=0
-        // public async Task<ActionResult<List<ProductReadDto>>> SearchProducts(
-        //     [FromQuery] PaginationOptions searchOptions,
-        //     [FromQuery] PaginationOptions paginationOptions
-        // )
-        // {
-        //     var products = await _productService.SearchProductsAsync(
-        //         searchOptions,
-        //         paginationOptions
-        //     );
-
-        //     if (products == null || products.Count == 0)
-        //     {
-        //         return NotFound(
-        //             new { message = "No products found matching the search criteria." }
-        //         );
-        //     }
-
-        //     return Ok(products);
-        // }
-
-        // //api/v1/products/sorted-filtered?filter.category=Vitamins&limit=10&offset=0
-        // [HttpGet("sorted-filtered")]
-        // public async Task<ActionResult<List<ProductReadDto>>> GetAllWithSortingAndFiltering(
-        //     [FromQuery] PaginationOptions paginationOptions
-        // )
-        // {
-        //     var products = await _productService.GetAllWithSortingAndFilteringAsync(
-        //         paginationOptions
-        //     );
-
-        //     if (products == null || products.Count == 0)
-        //     {
-        //         return NotFound(new { message = "No products found." });
-        //     }
-
-        //     return Ok(products);
-        // }
     }
 }

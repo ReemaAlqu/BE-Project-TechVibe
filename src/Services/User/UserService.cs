@@ -91,7 +91,7 @@ namespace src.Services.UserService
             if (foundUser == null)
             {
                 throw CustomException.BadRequest(
-                    $"User with email '{signInDto.EmailAddress}' not found."
+                    $"User with this email :'{signInDto.EmailAddress}' not found. Please register."
                 );
             }
             var isMatched = PasswordUtils.VerifyPassword(

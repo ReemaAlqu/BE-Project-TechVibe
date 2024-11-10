@@ -158,8 +158,8 @@ namespace src.Repository
         public async Task<List<Product>> GetAllAsync(PaginationOptions options)
         {
             // Start with all products
-            // var products = _product.Include(p => p.Category).ToList();
-            var products = _product.ToList();
+            var products = _product.Include(p => p.Category).ToList();
+
             // search
             if (!string.IsNullOrEmpty(options.Search))
             {
