@@ -10,7 +10,7 @@ namespace src.DTO
         {
             public Guid ProductId { get; set; }
             public int Quantity { get; set; }
-            public  Product? Product {  get; internal set; }
+            // public  Product? Product {  get; internal set; } 
 
         }
 

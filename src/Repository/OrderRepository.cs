@@ -33,7 +33,11 @@ namespace src.Repository
             await _orders.Include(order => order.User).FirstOrDefaultAsync(o => o.ID == orderId);
 
         public async Task<List<Order>> GetAllOrdersAsync() =>
-            await _orders.Include(order => order.User).ToListAsync();
+            await _orders
+                .Include(order => order.User)
+                .Include(order => order.OrderDetails)
+                .ThenInclude(order => order.Product)
+                .ToListAsync();
 
         public async Task<Order> AddOrderAsync(Order newOrder)
         {
@@ -72,11 +76,11 @@ namespace src.Repository
 
         public async Task<List<Order>> GetOrdersByUserId(Guid userId)
         {
-            return await _orders.
-            Include(order => order.OrderDetails)
-              .ThenInclude(order => order.Product)
-            .Where(o => o.UserID == userId).ToListAsync();
-
+            return await _orders
+                .Include(order => order.OrderDetails)
+                .ThenInclude(order => order.Product)
+                .Where(o => o.UserID == userId)
+                .ToListAsync();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace src.DTO
             public Guid ID { get; set; }
             public Guid UserID { get; set; }
 
-            public IEnumerable<OrderDetailReadDto> OrderDetails { get; set; }
+            public ICollection<OrderDetailReadDto> OrderDetails { get; set; }
         }
     }
 }
