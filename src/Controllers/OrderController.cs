@@ -21,50 +21,42 @@ namespace src.Controllers
             _authorization = authorization;
         }
 
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrderById(Guid id)
+        [HttpGet("users/{userId}")]
+        // [Authorize]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByUserId([FromRoute] Guid userId)
         {
-            return Ok(await _orderService.GetOrderByIdAsync(id));
+            return Ok(await _orderService.GetOrdersByUserId(userId));
+        }
+
+
+        [HttpGet("{orderId}")]
+        [Authorize]
+        public async Task<ActionResult<Order>> GetOrderById(Guid orderId)
+        {
+            return Ok(await _orderService.GetOrderByIdAsync(orderId));
         }
 
         [HttpGet]
-        [Authorize(Policy = "Admin")]
+        // [Authorize(Policy = "Admin")]
         public async Task<ActionResult<IEnumerable<Order>>> GetAll()
         {
             return Ok(await _orderService.GetAllOrdersAsync());
         }
 
-        // [HttpPost]
-        // [Authorize]
-        // public async Task<IActionResult> Create([FromBody] OrderDTO.Create order)
-        // {
-        //     var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //     if (userId == null || !Guid.TryParse(userId, out Guid parsedUserId))
-        //     {
-        //         return BadRequest("Invalid User ID.");
-        //     }
-        //     order.UserID = parsedUserId;
-        //     var createdOrderDTO = await _orderService.CreateOneOrderAsync(parsedUserId, order);
-        //     return CreatedAtAction(
-        //         nameof(GetOrderById),
-        //         new { id = createdOrderDTO.ID },
-        //         createdOrderDTO
-        //     );
-        // }
-    
-
-    //************************************************************************
-         [HttpPost]
+        //************************************************************************
+        [HttpPost]
         [Authorize]
-        public async Task<ActionResult<OrderDTO.Get>> CreateOneAsync([FromBody] OrderDTO.Create orderCreateDto)
+        public async Task<ActionResult<OrderDTO.Get>> CreateOneAsync(
+            [FromBody] OrderDTO.Create orderCreateDto
+        )
         {
             var authenticatedClaims = HttpContext.User;
-            var userId = authenticatedClaims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
+            var userId = authenticatedClaims
+                .FindFirst(c => c.Type == ClaimTypes.NameIdentifier)!
+                .Value;
             var userGuid = new Guid(userId);
             return await _orderService.CreateOneOrderAsync(userGuid, orderCreateDto);
         }
-
 
         [HttpPut("{id}")]
         [Authorize]

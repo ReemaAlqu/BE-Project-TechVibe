@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -13,27 +14,26 @@ using src.Services.product;
 using src.Services.UserService;
 using src.Utils;
 using static src.Entity.User;
-
 var builder = WebApplication.CreateBuilder(args);
-
 //***********************************************
-builder.Services.AddControllersWithViews();
-
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 //***********************************************
-
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(
     builder.Configuration.GetConnectionString("Local")
 );
 dataSourceBuilder.MapEnum<Role>();
-
 dataSourceBuilder.MapEnum<OrderStatuses>();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseNpgsql(dataSourceBuilder.ConnectionString);
 });
-
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
-
 builder
     .Services.AddScoped<ICategoryService, CategoryService>()
     .AddScoped<ICategoryRepository, CategoryRepository>()
@@ -43,7 +43,6 @@ builder
     .AddScoped<IProductRepository, ProductRepository>()
     .AddScoped<IUserService, UserService>()
     .AddScoped<UserRepository, UserRepository>();
-
 // cors
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
@@ -61,9 +60,7 @@ builder.Services.AddCors(options =>
         }
     );
 });
-
 // later when you deployed FE => add in line 67
-
 //auth
 builder
     .Services.AddAuthentication(options =>
@@ -86,26 +83,18 @@ builder
             ),
         };
     });
-
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
 });
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
-
 app.UseRouting();
-
-
-
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-
     try
     {
         if (dbContext.Database.CanConnect())
@@ -122,7 +111,6 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Database connection failed: {ex.Message}");
     }
 }
-
 app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 // cors
@@ -130,15 +118,11 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-// Add a defult route that return a string 
+// Add a defult route that return a string
 app.MapGet("/", () => "Server is running");
-
-
 app.Run();

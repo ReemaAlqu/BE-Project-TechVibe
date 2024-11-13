@@ -20,7 +20,7 @@ namespace src.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Admin")]
+        // [Authorize(Policy = "Admin")]
         public async Task<ActionResult<ProductReadDto>> CreateOne(
             [FromBody] ProductCreateDto createDto
         )

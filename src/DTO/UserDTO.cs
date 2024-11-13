@@ -41,9 +41,10 @@ namespace src.DTO
             public Guid UserID { get; set; }
             public string? Name { get; set; }
             public string? EmailAddress { get; set; }
-            public string? Password { get; set; }
             public string? Phone { get; set; }
             public Role UserRole { get; set; }
+
+            public ICollection<Order> Orders { get; set; }
         }
 
         public class UserUpdateDto

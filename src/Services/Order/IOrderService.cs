@@ -9,5 +9,6 @@ namespace src.Services
         Task<OrderDTO.Get> CreateOneOrderAsync(Guid userID, OrderDTO.Create orderDTO);
         Task<bool> UpdateOrderAsync(Guid id, OrderDTO.Update orderDTO);
         Task<bool> DeleteByIdAsync(Guid id);
+      Task<IEnumerable<OrderDTO.Get>> GetOrdersByUserId(Guid userId);
     }
 }

@@ -23,13 +23,6 @@ namespace src.Services
             );
         }
 
-        // public async Task<OrderDTO.Get> CreateOneOrderAsync(Guid userID, OrderDTO.Create orderDTO)
-        // {
-        //     Order order = _mapper.Map<OrderDTO.Create, Order>(orderDTO);
-        //     order.UserID = userID;
-        //     Order createdOrder = await _ordersRepo.AddOrderAsync(order);
-        //     return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
-        // }
         public async Task<OrderDTO.Get> CreateOneOrderAsync(Guid userID, OrderDTO.Create orderDTO)
         {
             // Map DTO to Entity
@@ -43,9 +36,16 @@ namespace src.Services
             return _mapper.Map<Order, OrderDTO.Get>(createdOrder);
         }
 
-        public async Task<OrderDTO.Get?> GetOrderByIdAsync(Guid id)
+        // public async Task<OrderDTO.Get?> GetOrderByIdAsync(Guid id)
+        // {
+        //     var requestedOrder = await _ordersRepo.GetOrderByIdAsync(id);
+        //     return _mapper.Map<OrderDTO.Get>(requestedOrder);
+        // }
+
+
+        public async  Task<OrderDTO.Get> GetOrderByIdAsync(Guid orderId)
         {
-            var requestedOrder = await _ordersRepo.GetOrderByIdAsync(id);
+            var requestedOrder = await _ordersRepo.GetOrderByIdAsync(orderId);
             return _mapper.Map<OrderDTO.Get>(requestedOrder);
         }
 
@@ -63,6 +63,13 @@ namespace src.Services
         public async Task<bool> DeleteByIdAsync(Guid id)
         {
             return await _ordersRepo.DeleteOrderAsync(id);
+        }
+
+        public  async Task<IEnumerable<OrderDTO.Get>> GetOrdersByUserId(Guid userId)
+        {
+            return (await _ordersRepo.GetOrdersByUserId(userId)).Select(order =>
+                _mapper.Map<OrderDTO.Get>(order)
+            );
         }
     }
 }

@@ -29,11 +29,11 @@ namespace src.Repository
             return await _user.ToListAsync();
         }
 
-      
-
         public async Task<User?> GetByIdAsync(Guid id)
         {
-            return await _user.FindAsync(id);
+            return await _user
+            .Include((u) => u.Orders).ThenInclude(o => o.OrderDetails).ThenInclude(o => o.Product)
+            .FirstOrDefaultAsync((u) => u.UserID == id); // if the user id is Id and not UserId
         }
 
         public async Task<bool> DeleteOneAsync(User user)
