@@ -69,7 +69,7 @@ namespace src.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult> DeleteOne(Guid id)
         {
             var isDeleted = await _userService.DeleteOneAsync(id);

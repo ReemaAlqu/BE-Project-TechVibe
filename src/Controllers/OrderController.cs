@@ -22,7 +22,7 @@ namespace src.Controllers
         }
 
         [HttpGet("users/{userId}")]
-        // [Authorize]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByUserId([FromRoute] Guid userId)
         {
             return Ok(await _orderService.GetOrdersByUserId(userId));
@@ -37,7 +37,7 @@ namespace src.Controllers
         }
 
         [HttpGet]
-        // [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<IEnumerable<Order>>> GetAll()
         {
             return Ok(await _orderService.GetAllOrdersAsync());

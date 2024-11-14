@@ -51,7 +51,7 @@ namespace src.Controllers
 
         // Create a new category
         [HttpPost]
-        // [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<CategoryReadDto>> CreateOne(
             [FromBody] CategoryCreateDto createDto
         )
