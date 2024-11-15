@@ -92,6 +92,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 app.UseRouting();
+// Add a defult route that return a string
+app.MapGet("/", () => "Server is running");
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
@@ -123,6 +125,5 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-// Add a defult route that return a string
-app.MapGet("/", () => "Server is running");
+
 app.Run();
